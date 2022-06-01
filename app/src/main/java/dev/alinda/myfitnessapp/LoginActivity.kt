@@ -45,7 +45,6 @@ class LoginActivity : AppCompatActivity() {
             if (email.isBlank()) {
                 tilEmail.error = "Email is required"
             }
-
             if (password.isBlank()) {
                 tilPassword.error = "Password is required"
             }

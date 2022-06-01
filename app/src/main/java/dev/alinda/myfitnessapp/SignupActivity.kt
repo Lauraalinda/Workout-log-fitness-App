@@ -33,14 +33,20 @@ class SignupActivity : AppCompatActivity() {
         etEmail=findViewById(R.id.etEmail)
         etPassword=findViewById(R.id.etPassword)
         etConfirmPassword=findViewById(R.id.etConfirmPassword)
+        tilFirstName=findViewById(R.id.tilFirstName)
+        tilLastName=findViewById(R.id.tilLastName)
+        tilEmail=findViewById(R.id.tilEmail)
+        tilPassword=findViewById(R.id.tilPassword)
+        tilConfirmPassword=findViewById(R.id.tilConfirmPassword)
         btnSignUp=findViewById(R.id.btnSignUp)
+
 
         tvLogin.setOnClickListener{
             val intent = Intent(this,LoginActivity::class.java)
             startActivity(intent)
         }
         btnSignUp.setOnClickListener{
-            val intent =Intent(this,SignupActivity::class.java)
+            val intent = Intent(this,LoginActivity::class.java)
             startActivity(intent)
             validateSignUp()
         }
@@ -51,8 +57,7 @@ class SignupActivity : AppCompatActivity() {
         var lastName= etLastName.text.toString()
         var email= etEmail.text.toString()
         var password=etPassword.text.toString()
-        var confirmPassword=etPassword.text.toString()
-
+        var confirmPassword=etConfirmPassword.text.toString()
         if (firstName.isBlank()){
             tilFirstName.error="First Name is required"
         }
@@ -68,6 +73,5 @@ class SignupActivity : AppCompatActivity() {
         if (confirmPassword.isBlank()){
             tilConfirmPassword.error="Password confirmation is required"
         }
-
     }
 }
