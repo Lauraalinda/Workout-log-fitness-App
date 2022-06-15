@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.textfield.TextInputEditText
@@ -46,32 +47,38 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
         }
         btnSignUp.setOnClickListener{
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this,SignupActivity::class.java)
             startActivity(intent)
             validateSignUp()
         }
     }
 
-    fun validateSignUp(){
-        var firstName= etFirstName.text.toString()
-        var lastName= etLastName.text.toString()
-        var email= etEmail.text.toString()
-        var password=etPassword.text.toString()
-        var confirmPassword=etConfirmPassword.text.toString()
-        if (firstName.isBlank()){
-            tilFirstName.error="First Name is required"
+    fun validateSignUp() {
+        var firstName = etFirstName.text.toString()
+        var lastName = etLastName.text.toString()
+        var email = etEmail.text.toString()
+        var password = etPassword.text.toString()
+        var confirmPassword = etConfirmPassword.text.toString()
+        if (firstName.isBlank()) {
+            tilFirstName.error = "First Name is required"
         }
-        if (lastName.isBlank()){
-            tilLastName.error="Last Name is required"
+        if (lastName.isBlank()) {
+            tilLastName.error = "Last Name is required"
         }
-        if (email.isBlank()){
-            tilEmail.error="Email is required"
+        if (email.isBlank()) {
+            tilEmail.error = "Email is required"
         }
-        if (password.isBlank()){
-            tilPassword.error="Password is required"
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            tilEmail.error ="Email is invalid"
         }
-        if (confirmPassword.isBlank()){
-            tilConfirmPassword.error="Password confirmation is required"
+        if (password.isBlank()) {
+            tilPassword.error = "Password is required"
+        }
+        if (confirmPassword.isBlank()) {
+            tilConfirmPassword.error = "Password confirmation is required"
+        }
+        if(password!=confirmPassword){
+            tilConfirmPassword.error= "Incorrect confirmation"
         }
     }
 }
