@@ -1,10 +1,11 @@
-package dev.alinda.myfitnessapp
+package dev.alinda.myfitnessapp.UI
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dev.alinda.myfitnessapp.R
 
 
 class TrackFragment : Fragment() {

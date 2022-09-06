@@ -1,15 +1,11 @@
-package dev.alinda.myfitnessapp
+package dev.alinda.myfitnessapp.UI
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import dev.alinda.myfitnessapp.databinding.ActivityLoginBinding
 
 

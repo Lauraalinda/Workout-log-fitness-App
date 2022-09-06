@@ -1,15 +1,9 @@
-package dev.alinda.myfitnessapp
+package dev.alinda.myfitnessapp.UI
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Patterns
-import android.widget.Button
-import android.widget.TextView
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import dev.alinda.myfitnessapp.databinding.ActivityLoginBinding
 import dev.alinda.myfitnessapp.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
@@ -22,11 +16,11 @@ class SignupActivity : AppCompatActivity() {
     }
    fun handleclick(){
         binding.tvLogin.setOnClickListener{
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
       binding.btnSignUp.setOnClickListener{
-            val intent = Intent(this,SignupActivity::class.java)
+            val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
             validateSignUp()
         }
@@ -38,13 +32,18 @@ class SignupActivity : AppCompatActivity() {
         var email = binding.etEmail.text.toString()
         var password = binding.etPassword.text.toString()
         var confirmPassword = binding.etConfirmPassword.text.toString()
+
+        var error=false
         if (firstName.isBlank()) {
+            error=true
             binding.tilFirstName.error = "First Name is required"
         }
         if (lastName.isBlank()) {
+            error=true
             binding.tilLastName.error = "Last Name is required"
         }
         if (email.isBlank()) {
+            error=true
             binding.tilEmail.error = "Email is required"
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
