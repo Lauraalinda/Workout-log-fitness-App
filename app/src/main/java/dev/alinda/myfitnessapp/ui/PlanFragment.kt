@@ -1,4 +1,4 @@
-package dev.alinda.myfitnessapp.UI
+package dev.alinda.myfitnessapp.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

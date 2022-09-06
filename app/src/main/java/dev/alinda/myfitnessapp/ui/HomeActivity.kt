@@ -1,4 +1,4 @@
-package dev.alinda.myfitnessapp.UI
+package dev.alinda.myfitnessapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
