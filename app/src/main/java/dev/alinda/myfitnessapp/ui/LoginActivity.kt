@@ -7,21 +7,24 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import dev.alinda.myfitnessapp.ApiClient
-import dev.alinda.myfitnessapp.ApiInterface
+import androidx.lifecycle.Observer
+import dev.alinda.myfitnessapp.api.ApiClient
+import dev.alinda.myfitnessapp.api.ApiInterface
 import dev.alinda.myfitnessapp.databinding.ActivityLoginBinding
 import dev.alinda.myfitnessapp.models.LoginRequest
 import dev.alinda.myfitnessapp.models.LoginResponse
-import okhttp3.Response
+import dev.alinda.myfitnessapp.viewmodel.UserViewModel
 import retrofit2.Call
 import retrofit2.Callback
 
 
+
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
-
-    lateinit var sharedPrefs: SharedPreferences
+    lateinit var sharedPrefs: SharedPreferences //helps one to stay logged in if they were already logged in
+    val userViewModel:UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         handleclick()
        sharedPrefs = getSharedPreferences("MYFITNESSAPP_PREFS", MODE_PRIVATE)
+
     }
 
     fun handleclick() {
@@ -40,6 +44,24 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             validateLogin()
         }
+    }
+
+    override fun onResume(){
+        super.onResume()
+        //when a response comes back after a request we have been obsserving
+        userViewModel.loginLiveData.observe(this, Observer { loginResponse->
+            //incase anything happens the activity will know and excecute the code below since it has been observing
+
+            //so as soon as sth changes the activity will know becuase it has been observing
+            Toast.makeText(baseContext, loginResponse?.message, Toast.LENGTH_LONG).show()
+            persistLoginDetails(loginResponse!!)
+            startActivity(Intent(baseContext,HomeActivity::class.java))
+
+        })
+        userViewModel.loginError.observe(this, Observer{ errorMsg ->
+            Toast.makeText(baseContext, errorMsg, Toast.LENGTH_LONG).show()
+
+        })
     }
 
     fun validateLogin() {
@@ -73,39 +95,15 @@ class LoginActivity : AppCompatActivity() {
         }
         if (!error){
             val loginRequest = LoginRequest(email, password)
-            makeLoginRequest(loginRequest)
+            userViewModel.login(loginRequest)
         }
     }
 
-    fun makeLoginRequest(loginRequest: LoginRequest){
-        val apiClient =ApiClient.buildApiClient(ApiInterface:: class.java)
-        val request =apiClient.loginUser(loginRequest)
-
-        request.enqueue(object : Callback<LoginResponse> {//import call back from retrofit and // import some other call for retrofit
-            override fun onResponse(
-                call: Call<LoginResponse>, response: retrofit2.Response<LoginResponse>) {
-                if (response.isSuccessful){
-                    val loginResponse = response.body()
-                    Toast.makeText(baseContext, loginResponse?.message, Toast.LENGTH_LONG).show()
-                    persistLoginDetails(loginResponse!!)
-                    startActivity(Intent(baseContext,HomeActivity::class.java))
-                    //open Home
-                }
-                else{
-                    val error = response.errorBody()?.string()
-                    Toast.makeText(baseContext, error, Toast.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-               Toast.makeText(baseContext, t.message, Toast.LENGTH_LONG).show()
-            }
-        })
-    }
     fun persistLoginDetails(loginResponse: LoginResponse){
         val editor= sharedPrefs.edit()
+        val token = "Bearer ${loginResponse.accessToken}"
         editor.putString("USER_ID", loginResponse.userId)
-        editor.putString("ACCESS_TOKEN", loginResponse.accessToken)
+        editor.putString("ACCESS_TOKEN", token)
         editor.putString("PROFILE_ID", loginResponse.profileId)
         editor.apply()
     }

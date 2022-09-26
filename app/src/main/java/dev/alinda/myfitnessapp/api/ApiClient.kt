@@ -1,4 +1,4 @@
-package dev.alinda.myfitnessapp
+package dev.alinda.myfitnessapp.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
